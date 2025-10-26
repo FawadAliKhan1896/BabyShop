@@ -1,0 +1,30 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // 🔹 Add Google Services plugin dependency
+        classpath 'com.google.gms:google-services:4.3.15'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// 🔹 Fix for build directory structure (Groovy syntax)
+buildDir = "../build"
+
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.evaluationDependsOn(":app")
+}
+
+// 🔹 Clean task
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
