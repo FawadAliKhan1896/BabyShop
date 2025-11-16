@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../product/product_detail.dart';
 
 class WishlistScreen extends StatefulWidget {
@@ -14,21 +15,20 @@ class _WishlistScreenState extends State<WishlistScreen> {
   final user = FirebaseAuth.instance.currentUser;
   final wishlistCollection = FirebaseFirestore.instance.collection('wishlists');
 
-  final Color backgroundColor = const Color(0xFF121212);
-  final Color cardColor = const Color(0xFF1F1F1F);
-  final Color accentYellow = const Color(0xFFFFC107);
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.pinkAccent,
         elevation: 2,
         centerTitle: true,
-        title: const Text(
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
           "My Wishlist",
-          style: TextStyle(
+          style: GoogleFonts.comfortaa(
             fontWeight: FontWeight.bold,
             fontSize: 22,
             color: Colors.white,
@@ -40,7 +40,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFFFC107)),
+              child: CircularProgressIndicator(color: Colors.pinkAccent),
             );
           }
 
@@ -52,18 +52,48 @@ class _WishlistScreenState extends State<WishlistScreen> {
           }.values.toList();
 
           if (wishlistItems.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 "Your wishlist is empty",
-                style: TextStyle(color: Colors.white70, fontSize: 16),
+                style: GoogleFonts.comfortaa(
+                  color: Colors.black54,
+                  fontSize: 16,
+                ),
               ),
             );
           }
 
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            itemCount: wishlistItems.length,
-            itemBuilder: (context, index) {
+          return Stack(
+            children: [
+              // Decorative Background
+              Positioned(
+                top: -50,
+                right: -50,
+                child: Container(
+                  width: 150,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.pinkAccent.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 200,
+                left: -30,
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Colors.pinkAccent.withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+              ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                itemCount: wishlistItems.length,
+                itemBuilder: (context, index) {
               final item = wishlistItems[index];
               final image = item['image'] ?? item['imageUrl'] ?? '';
               final name = item['name'] ?? 'Unnamed Product';
@@ -81,18 +111,17 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
-                    color: cardColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
-                      // Yellow glow behind card
                       BoxShadow(
-                        color: accentYellow.withOpacity(0.3),
+                        color: Colors.pinkAccent.withOpacity(0.15),
                         blurRadius: 15,
                         spreadRadius: 2,
                         offset: const Offset(0, 4),
                       ),
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
+                        color: Colors.black.withOpacity(0.05),
                         blurRadius: 10,
                         offset: const Offset(0, 6),
                       ),
@@ -118,10 +147,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                     errorBuilder: (_, __, ___) => Container(
                                       width: 130,
                                       height: 130,
-                                      color: Colors.grey[800],
+                                      color: Colors.grey[200],
                                       child: const Icon(
                                         Icons.image_not_supported,
-                                        color: Colors.white54,
+                                        color: Colors.black54,
                                         size: 50,
                                       ),
                                     ),
@@ -129,25 +158,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                 : Container(
                                     width: 130,
                                     height: 130,
-                                    color: Colors.grey[800],
+                                    color: Colors.grey[200],
                                     child: const Icon(
                                       Icons.image,
-                                      color: Colors.white54,
+                                      color: Colors.black54,
                                       size: 50,
                                     ),
                                   ),
-                            // Gradient overlay
-                            Container(
-                              width: 130,
-                              height: 130,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [Colors.black54, Colors.transparent],
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                ),
-                              ),
-                            ),
+
                           ],
                         ),
                       ),
@@ -162,24 +180,23 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                 name,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: GoogleFonts.comfortaa(
+                                  color: Colors.black87,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              // Price tag with yellow background
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: accentYellow.withOpacity(0.9),
+                                  color: Colors.pinkAccent.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
                                   "Rs ${price.toStringAsFixed(0)}",
-                                  style: const TextStyle(
-                                    color: Colors.black,
+                                  style: GoogleFonts.comfortaa(
+                                    color: Colors.pinkAccent,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
                                   ),
@@ -196,11 +213,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
                           onTap: () => _removeItem(item),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.red[800], // Dark red background
+                              color: Colors.red[400],
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: Colors.red.withOpacity(0.3),
                                   blurRadius: 3,
                                   offset: const Offset(0, 2),
                                 ),
@@ -218,8 +235,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     ],
                   ),
                 ),
-              );
-            },
+                );
+              },
+            ),
+            ],
           );
         },
       ),
@@ -239,11 +258,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.redAccent,
+        SnackBar(
+          backgroundColor: Colors.pinkAccent,
           content: Text(
             "Removed from wishlist",
-            style: TextStyle(color: Colors.white),
+            style: GoogleFonts.comfortaa(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       );

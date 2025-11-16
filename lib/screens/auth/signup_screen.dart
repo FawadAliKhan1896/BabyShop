@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -60,172 +61,274 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // 🔹 Background gradient
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [const Color.fromARGB(255, 255, 228, 248), const Color.fromARGB(255, 255, 182, 249)!],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          // Enhanced Decorative Background
+          Positioned(
+            top: -120,
+            left: -120,
+            child: Container(
+              width: 280,
+              height: 280,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.pinkAccent.withOpacity(0.12),
+                    Colors.pinkAccent.withOpacity(0.04),
+                    Colors.transparent,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 250,
+            right: -90,
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.pink.shade100.withOpacity(0.18),
+                    Colors.pink.shade50.withOpacity(0.08),
+                  ],
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                ),
+                borderRadius: BorderRadius.circular(45),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -80,
+            left: -50,
+            child: Container(
+              width: 170,
+              height: 170,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.pinkAccent.withOpacity(0.1),
+                    Colors.transparent,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 400,
+            left: 50,
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.pink.shade50.withOpacity(0.35),
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 150,
+            right: 60,
+            child: Container(
+              width: 35,
+              height: 35,
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent.withOpacity(0.08),
+                shape: BoxShape.circle,
               ),
             ),
           ),
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
-                  padding: EdgeInsets.all(30),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                // Logo Section
+                Container(
+                  width: 120,
+                  height: 120,
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color.fromARGB(255, 255, 59, 242).withOpacity(0.3),
-                        blurRadius: 25,
-                        offset: Offset(0, 15),
+                    color: Colors.pinkAccent.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(60),
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.baby_changing_station,
+                        color: Colors.pinkAccent,
+                        size: 60,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                
+                // Title
+                Text(
+                  "Create Account",
+                  style: GoogleFonts.comfortaa(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Join BabyShop family today",
+                  style: GoogleFonts.comfortaa(
+                    fontSize: 16,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+                const SizedBox(height: 40),
+
+                // Form
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      // Name Field
+                      TextFormField(
+                        style: GoogleFonts.comfortaa(color: Colors.black87),
+                        decoration: InputDecoration(
+                          labelText: "Full Name",
+                          labelStyle: GoogleFonts.comfortaa(color: Colors.grey.shade600),
+                          prefixIcon: const Icon(Icons.person_outline, color: Colors.pinkAccent),
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(color: Colors.pinkAccent, width: 2),
+                          ),
+                        ),
+                        onSaved: (value) => name = value ?? '',
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Email Field
+                      TextFormField(
+                        style: GoogleFonts.comfortaa(color: Colors.black87),
+                        decoration: InputDecoration(
+                          labelText: "Email",
+                          labelStyle: GoogleFonts.comfortaa(color: Colors.grey.shade600),
+                          prefixIcon: const Icon(Icons.email_outlined, color: Colors.pinkAccent),
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(color: Colors.pinkAccent, width: 2),
+                          ),
+                        ),
+                        onSaved: (value) => email = value ?? '',
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Password Field
+                      TextFormField(
+                        obscureText: true,
+                        style: GoogleFonts.comfortaa(color: Colors.black87),
+                        decoration: InputDecoration(
+                          labelText: "Password",
+                          labelStyle: GoogleFonts.comfortaa(color: Colors.grey.shade600),
+                          prefixIcon: const Icon(Icons.lock_outline, color: Colors.pinkAccent),
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(color: Colors.pinkAccent, width: 2),
+                          ),
+                        ),
+                        onSaved: (value) => password = value ?? '',
+                      ),
+                      const SizedBox(height: 32),
+
+                      // Sign Up Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: _loading
+                            ? const Center(
+                                child: CircularProgressIndicator(color: Colors.pinkAccent),
+                              )
+                            : ElevatedButton(
+                                onPressed: _signup,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.pinkAccent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  elevation: 0,
+                                ),
+                                child: Text(
+                                  "Create Account",
+                                  style: GoogleFonts.comfortaa(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                      ),
+                      const SizedBox(height: 32),
+
+                      // Login Link
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Already have an account? ",
+                            style: GoogleFonts.comfortaa(
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (_) => LoginScreen()),
+                              );
+                            },
+                            child: Text(
+                              "Sign In",
+                              style: GoogleFonts.comfortaa(
+                                color: Colors.pinkAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // 🔹 Logo/Title
-                        Text(
-                          "Baby Shop",
-                          style: TextStyle(
-                            color: const Color.fromARGB(255, 255, 59, 226),
-                            fontSize: 38,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          "Create your account now",
-                          style: TextStyle(color: Colors.white70, fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 30),
-
-                        // 🔹 Name field
-                        TextFormField(
-                          style: TextStyle(color: Colors.white),
-                          decoration: _inputDecoration(hint: "Full Name", icon: Icons.person),
-                          onSaved: (value) => name = value ?? '',
-                        ),
-                        SizedBox(height: 20),
-
-                        // 🔹 Email field
-                        TextFormField(
-                          style: TextStyle(color: Colors.white),
-                          decoration: _inputDecoration(hint: "Email", icon: Icons.email),
-                          onSaved: (value) => email = value ?? '',
-                        ),
-                        SizedBox(height: 20),
-
-                        // 🔹 Password field
-                        TextFormField(
-                          obscureText: true,
-                          style: TextStyle(color: Colors.white),
-                          decoration: _inputDecoration(hint: "Password", icon: Icons.lock),
-                          onSaved: (value) => password = value ?? '',
-                        ),
-                        SizedBox(height: 30),
-
-                        // 🔹 Signup button
-                        SizedBox(
-                          width: double.infinity,
-                          height: 55,
-                          child: _loading
-                              ? Center(child: CircularProgressIndicator(color: const Color.fromARGB(255, 255, 86, 224)))
-                              : ElevatedButton(
-                                  onPressed: _signup,
-                                  style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.all(0),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                  child: Ink(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [const Color.fromARGB(255, 255, 173, 245), const Color.fromARGB(255, 255, 88, 208)],
-                                      ),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Sign Up",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: const Color.fromARGB(255, 255, 63, 252),
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                        ),
-                        SizedBox(height: 25),
-
-                        // 🔹 Login link
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Already have an account?",
-                              style: TextStyle(color: const Color.fromARGB(179, 95, 95, 95)),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(builder: (_) => LoginScreen()),
-                                );
-                              },
-                              child: Text(
-                                "Login",
-                                style: TextStyle(
-                                  color: const Color.fromARGB(255, 255, 59, 242),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                ),
+                  ],
                 ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  InputDecoration _inputDecoration({required String hint, required IconData icon}) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: TextStyle(color: const Color.fromARGB(137, 249, 127, 255)),
-      filled: true,
-      fillColor: const Color.fromARGB(255, 195, 195, 195),
-      prefixIcon: Icon(icon, color: const Color.fromARGB(255, 255, 59, 229)),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: const Color.fromARGB(255, 255, 59, 229), width: 2),
       ),
     );
   }

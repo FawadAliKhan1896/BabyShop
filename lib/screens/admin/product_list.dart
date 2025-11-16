@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'add_product.dart';
 import 'edit_product.dart';
 
@@ -7,17 +8,16 @@ class AdminProductListScreen extends StatelessWidget {
   final CollectionReference productsRef =
       FirebaseFirestore.instance.collection('products');
 
-  final Color backgroundColor = const Color(0xFF1E1E1E);
-  final Color accentYellow = const Color(0xFFFFC107);
-
-  // 🔹 Delete Product Function
   Future<void> _deleteProduct(BuildContext context, String docId) async {
     try {
       await productsRef.doc(docId).delete();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("Product deleted successfully"),
-          backgroundColor: accentYellow,
+          backgroundColor: Colors.pinkAccent,
+          content: Text(
+            "Product deleted successfully",
+            style: GoogleFonts.comfortaa(color: Colors.white),
+          ),
         ),
       );
     } catch (e) {
@@ -30,11 +30,17 @@ class AdminProductListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: backgroundColor,
-        title: const Text("Manage Products", style: TextStyle(color: Colors.white)),
-        centerTitle: true,
+        backgroundColor: Colors.pinkAccent,
+        title: Text(
+          "Manage Products",
+          style: GoogleFonts.comfortaa(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
             onPressed: () {
@@ -43,7 +49,7 @@ class AdminProductListScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (_) => const AdminAddProductScreen()),
               );
             },
-            icon: const Icon(Icons.add, color: Colors.greenAccent),
+            icon: const Icon(Icons.add, color: Colors.white),
           ),
         ],
       ),
@@ -51,89 +57,134 @@ class AdminProductListScreen extends StatelessWidget {
         stream: productsRef.orderBy('createdAt', descending: true).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(color: Colors.greenAccent),
-            );
+            return const Center(child: CircularProgressIndicator(color: Colors.pinkAccent));
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 "No products found.",
-                style: TextStyle(color: Colors.white70),
+                style: GoogleFonts.comfortaa(color: Colors.black54),
               ),
             );
           }
 
           final products = snapshot.data!.docs;
 
-          return ListView.builder(
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              final data = product.data() as Map<String, dynamic>;
+          return Stack(
+            children: [
+              Positioned(
+                top: -70,
+                right: -70,
+                child: Container(
+                  width: 180,
+                  height: 180,
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      colors: [
+                        Colors.pinkAccent.withOpacity(0.1),
+                        Colors.pinkAccent.withOpacity(0.03),
+                        Colors.transparent,
+                      ],
+                    ),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: -50,
+                left: -50,
+                child: Container(
+                  width: 140,
+                  height: 140,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.pink.shade100.withOpacity(0.12),
+                        Colors.pink.shade50.withOpacity(0.06),
+                      ],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+              ),
+              ListView.builder(
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  final data = product.data() as Map<String, dynamic>;
 
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => AdminEditProductScreen(
-                        productId: product.id,
-                        productData: data,
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.pinkAccent.withOpacity(0.15),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: data['imageUrl'] != null && data['imageUrl'] != ''
+                            ? Image.network(
+                                data['imageUrl'],
+                                width: 55,
+                                height: 55,
+                                fit: BoxFit.cover,
+                              )
+                            : const Icon(Icons.image, color: Colors.black54, size: 55),
+                      ),
+                      title: Text(
+                        data['name'] ?? 'No name',
+                        style: GoogleFonts.comfortaa(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text(
+                        "Rs ${data['price'] ?? 0}",
+                        style: GoogleFonts.comfortaa(
+                          color: Colors.pinkAccent,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.pinkAccent),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => AdminEditProductScreen(
+                                    productId: product.id,
+                                    productData: data,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.redAccent),
+                            onPressed: () => _deleteProduct(context, product.id),
+                          ),
+                        ],
                       ),
                     ),
                   );
                 },
-                child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[900],
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: accentYellow.withOpacity(0.3),
-                        blurRadius: 8,
-                        spreadRadius: 1,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: data['imageUrl'] != null && data['imageUrl'] != ''
-                          ? Image.network(
-                              data['imageUrl'],
-                              width: 55,
-                              height: 55,
-                              fit: BoxFit.cover,
-                            )
-                          : const Icon(Icons.image, color: Colors.white54, size: 55),
-                    ),
-                    title: Text(
-                      data['name'] ?? 'No name',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(
-                      "Rs ${data['price'] ?? 0}",
-                      style: TextStyle(
-                        color: accentYellow,
-                        fontSize: 14,
-                      ),
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.redAccent),
-                      onPressed: () => _deleteProduct(context, product.id),
-                    ),
-                  ),
-                ),
-              );
-            },
+              ),
+            ],
           );
         },
       ),

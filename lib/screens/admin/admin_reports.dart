@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AdminReportsScreen extends StatelessWidget {
   const AdminReportsScreen({super.key});
-
-  final Color backgroundColor = const Color(0xFF1E1E1E);
-  final Color accentYellow = const Color(0xFFFFC107);
 
   Future<Map<String, dynamic>> _fetchReportData() async {
     final ordersSnapshot =
@@ -17,7 +15,7 @@ class AdminReportsScreen extends StatelessWidget {
 
     for (var order in ordersSnapshot.docs) {
       final data = order.data();
-      totalRevenue += (data['totalAmount'] ?? 0).toDouble();
+      totalRevenue += (data['total'] ?? 0).toDouble();
 
       final items =
           List<Map<String, dynamic>>.from(data['items'] ?? <Map<String, dynamic>>[]);
@@ -43,30 +41,30 @@ class AdminReportsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: backgroundColor,
-        title: const Text(
+        backgroundColor: Colors.pinkAccent,
+        title: Text(
           "Reports & Analytics",
-          style: TextStyle(color: Colors.white),
+          style: GoogleFonts.comfortaa(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _fetchReportData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(color: Colors.greenAccent),
-            );
+            return const Center(child: CircularProgressIndicator(color: Colors.pinkAccent));
           }
 
           if (!snapshot.hasData || snapshot.data == null) {
-            return const Center(
+            return Center(
               child: Text(
                 "No report data found.",
-                style: TextStyle(color: Colors.white70),
+                style: GoogleFonts.comfortaa(color: Colors.black54),
               ),
             );
           }
@@ -74,60 +72,101 @@ class AdminReportsScreen extends StatelessWidget {
           final data = snapshot.data!;
           final topProducts = data['topProducts'] as List<MapEntry<String, int>>;
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildStatCard(
-                    "Total Orders", data['totalOrders'].toString(), Icons.shopping_bag),
-                const SizedBox(height: 15),
-                _buildStatCard(
-                    "Total Revenue",
-                    "Rs ${data['totalRevenue'].toStringAsFixed(0)}",
-                    Icons.currency_rupee),
-                const SizedBox(height: 25),
-                const Text(
-                  "🏆 Top Selling Products",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                ...topProducts.map((p) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[900],
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: accentYellow.withOpacity(0.3),
-                          blurRadius: 6,
-                          spreadRadius: 1,
-                          offset: const Offset(0, 3),
-                        ),
+          return Stack(
+            children: [
+              Positioned(
+                top: -80,
+                right: -80,
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      colors: [
+                        Colors.pinkAccent.withOpacity(0.1),
+                        Colors.pinkAccent.withOpacity(0.03),
+                        Colors.transparent,
                       ],
                     ),
-                    child: ListTile(
-                      leading: Icon(Icons.watch, color: accentYellow),
-                      title: Text(p.key,
-                          style: const TextStyle(color: Colors.white)),
-                      trailing: Text("Sold: ${p.value}",
-                          style: TextStyle(
-                              color: accentYellow, fontWeight: FontWeight.bold)),
-                    ),
-                  );
-                }).toList(),
-                if (topProducts.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text("No sales data yet.",
-                        style: TextStyle(color: Colors.white70)),
+                    shape: BoxShape.circle,
                   ),
-              ],
-            ),
+                ),
+              ),
+              Positioned(
+                bottom: -60,
+                left: -60,
+                child: Container(
+                  width: 160,
+                  height: 160,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.pink.shade100.withOpacity(0.12),
+                        Colors.pink.shade50.withOpacity(0.06),
+                      ],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                    ),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+              ),
+              SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildStatCard(
+                        "Total Orders", data['totalOrders'].toString(), Icons.shopping_bag),
+                    const SizedBox(height: 15),
+                    _buildStatCard(
+                        "Total Revenue",
+                        "Rs ${data['totalRevenue'].toStringAsFixed(0)}",
+                        Icons.currency_rupee),
+                    const SizedBox(height: 25),
+                    Text(
+                      "🏆 Top Selling Products",
+                      style: GoogleFonts.comfortaa(
+                          color: Colors.black87,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    ...topProducts.map((p) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.pinkAccent.withOpacity(0.15),
+                              blurRadius: 6,
+                              spreadRadius: 1,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          leading: const Icon(Icons.baby_changing_station, color: Colors.pinkAccent),
+                          title: Text(p.key,
+                              style: GoogleFonts.comfortaa(color: Colors.black87)),
+                          trailing: Text("Sold: ${p.value}",
+                              style: GoogleFonts.comfortaa(
+                                  color: Colors.pinkAccent, fontWeight: FontWeight.bold)),
+                        ),
+                      );
+                    }).toList(),
+                    if (topProducts.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Text("No sales data yet.",
+                            style: GoogleFonts.comfortaa(color: Colors.black54)),
+                      ),
+                  ],
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -137,11 +176,11 @@ class AdminReportsScreen extends StatelessWidget {
   Widget _buildStatCard(String title, String value, IconData icon) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[900],
+        color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: accentYellow.withOpacity(0.3),
+            color: Colors.pinkAccent.withOpacity(0.15),
             blurRadius: 6,
             spreadRadius: 1,
             offset: const Offset(0, 3),
@@ -151,18 +190,18 @@ class AdminReportsScreen extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          Icon(icon, color: accentYellow, size: 28),
+          Icon(icon, color: Colors.pinkAccent, size: 28),
           const SizedBox(width: 15),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(value,
-                  style: const TextStyle(
-                      color: Colors.white,
+                  style: GoogleFonts.comfortaa(
+                      color: Colors.black87,
                       fontSize: 20,
                       fontWeight: FontWeight.bold)),
               Text(title,
-                  style: const TextStyle(color: Colors.white70, fontSize: 14)),
+                  style: GoogleFonts.comfortaa(color: Colors.black54, fontSize: 14)),
             ],
           ),
         ],

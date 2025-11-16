@@ -47,7 +47,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       await docRef.set({'items': wishlistItems});
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Colors.pinkAccent,
           content: Text("Removed from wishlist 💔",
               style: TextStyle(color: Colors.white)),
         ),
@@ -57,7 +57,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       await docRef.set({'items': wishlistItems});
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.pinkAccent,
           content: Text("Added to wishlist ❤️",
               style: TextStyle(color: Colors.white)),
         ),
@@ -72,19 +72,20 @@ class _CategoryScreenState extends State<CategoryScreen> {
     final name = widget.category["name"]?.toString() ?? "Unnamed";
 
     final List<Color> bgColors = [
-      Colors.greenAccent.shade400,
-      Colors.blueAccent.shade400,
-      Colors.orangeAccent.shade400,
-      Colors.purpleAccent.shade400,
-      Colors.redAccent.shade400,
-      Colors.tealAccent.shade400,
+      Colors.pinkAccent.shade100,
+      Colors.pinkAccent.shade200,
+      Colors.pinkAccent.shade100,
+      Colors.pinkAccent.shade200,
+      Colors.pinkAccent.shade100,
+      Colors.pinkAccent.shade200,
     ];
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(name, style: const TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.pinkAccent,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Column(
         children: [
@@ -97,13 +98,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   searchQuery = value.toLowerCase();
                 });
               },
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 hintText: "Search products...",
-                hintStyle: const TextStyle(color: Colors.white54),
+                hintStyle: const TextStyle(color: Colors.black54),
                 filled: true,
-                fillColor: Colors.grey[900],
-                prefixIcon: const Icon(Icons.search, color: Colors.white70),
+                fillColor: Colors.grey[100],
+                prefixIcon: const Icon(Icons.search, color: Colors.pinkAccent),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -124,7 +125,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     child: ChoiceChip(
                       label: Text(filter),
                       selected: selectedFilter == filter,
-                      selectedColor: Colors.greenAccent,
+                      selectedColor: Colors.pinkAccent,
                       onSelected: (_) {
                         setState(() {
                           selectedFilter = filter;
@@ -132,11 +133,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       },
                       labelStyle: TextStyle(
                         color: selectedFilter == filter
-                            ? Colors.black
-                            : Colors.white,
+                            ? Colors.white
+                            : Colors.black,
                         fontWeight: FontWeight.w600,
                       ),
-                      backgroundColor: Colors.grey[850],
+                      backgroundColor: Colors.grey[200],
                     ),
                   ),
               ],
@@ -153,7 +154,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
-                    child: CircularProgressIndicator(color: Colors.greenAccent),
+                    child: CircularProgressIndicator(color: Colors.pinkAccent),
                   );
                 }
 
@@ -163,7 +164,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   return const Center(
                     child: Text(
                       "No products found",
-                      style: TextStyle(color: Colors.white54, fontSize: 16),
+                      style: TextStyle(color: Colors.black54, fontSize: 16),
                     ),
                   );
                 }
@@ -230,18 +231,16 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           ),
                         );
                       },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: color,
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              blurRadius: 6,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
+                      child: Card(
+                        color: color,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
+                        elevation: 4,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                         child: Stack(
                           children: [
                             Column(
@@ -278,7 +277,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                         Text(
                                           productName,
                                           style: const TextStyle(
-                                            color: Colors.black,
+                                            color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14,
                                           ),
@@ -290,7 +289,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                         Text(
                                           "Rs $price",
                                           style: const TextStyle(
-                                            color: Colors.black87,
+                                            color: Colors.white,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -328,6 +327,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               ),
                             ),
                           ],
+                        ),
                         ),
                       ),
                     );

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_fonts/google_fonts.dart';
 
 class AdminAddProductScreen extends StatefulWidget {
   const AdminAddProductScreen({super.key});
@@ -35,10 +36,6 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
 
   final String cloudName = "dkscvg8pg";
   final String uploadPreset = "image_create";
-
-  final Color backgroundColor = const Color(0xFF1E1E1E);
-  final Color cardColor = const Color(0xFF2B2B2B);
-  final Color accentYellow = const Color(0xFFFFC107);
 
   Future<String?> uploadImageToCloudinary(File imageFile) async {
     try {
@@ -80,10 +77,11 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
     if (!_formKey.currentState!.validate() || _imageUrl == null || _category == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: accentYellow,
-          content: const Text(
-              "Please fill all fields, select category & upload image",
-              style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.pinkAccent,
+          content: Text(
+            "Please fill all fields, select category & upload image",
+            style: GoogleFonts.comfortaa(color: Colors.white),
+          ),
         ),
       );
       return;
@@ -109,134 +107,170 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
 
   InputDecoration _inputDecoration(String label) => InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.white70),
-        enabledBorder:
-            const OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
-        focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: accentYellow)),
+        labelStyle: GoogleFonts.comfortaa(color: Colors.black54),
+        filled: true,
+        fillColor: Colors.grey.shade50,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.pinkAccent),
+          borderRadius: BorderRadius.circular(10),
+        ),
       );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: backgroundColor,
-        title: const Text("Add Product", style: TextStyle(color: Colors.white)),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Product Name
-              TextFormField(
-                style: const TextStyle(color: Colors.white),
-                decoration: _inputDecoration("Product Name"),
-                validator: (v) => v!.isEmpty ? "Enter product name" : null,
-                onSaved: (v) => _name = v!,
-              ),
-              const SizedBox(height: 20),
-
-              // Description
-              TextFormField(
-                maxLines: 3,
-                style: const TextStyle(color: Colors.white),
-                decoration: _inputDecoration("Description"),
-                validator: (v) => v!.isEmpty ? "Enter description" : null,
-                onSaved: (v) => _description = v!,
-              ),
-              const SizedBox(height: 20),
-
-              // Price
-              TextFormField(
-                keyboardType: TextInputType.number,
-                style: const TextStyle(color: Colors.white),
-                decoration: _inputDecoration("Price (Rs)"),
-                validator: (v) => v!.isEmpty ? "Enter price" : null,
-                onSaved: (v) => _price = double.parse(v!),
-              ),
-              const SizedBox(height: 20),
-
-              // Category Dropdown
-              DropdownButtonFormField<String>(
-                value: _category,
-                dropdownColor: Colors.grey[900],
-                decoration: _inputDecoration("Select Category"),
-                items: categories
-                    .map((cat) => DropdownMenuItem(
-                          value: cat,
-                          child: Text(cat, style: const TextStyle(color: Colors.white)),
-                        ))
-                    .toList(),
-                onChanged: (val) => setState(() => _category = val),
-                validator: (v) => v == null ? "Select category" : null,
-              ),
-              const SizedBox(height: 20),
-
-              // Image Picker with Glow
-              Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: accentYellow.withOpacity(0.4),
-                        blurRadius: 12,
-                        spreadRadius: 2,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      _imageUrl != null
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.network(_imageUrl!, height: 150),
-                            )
-                          : const Icon(Icons.image, color: Colors.white70, size: 100),
-                      const SizedBox(height: 10),
-                      _isUploading
-                          ? const CircularProgressIndicator(color: Colors.amberAccent)
-                          : ElevatedButton.icon(
-                              onPressed: _pickImage,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: accentYellow,
-                                foregroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              icon: const Icon(Icons.upload),
-                              label: const Text("Upload Image"),
-                            ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-
-              // Save Button
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _saveProduct,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: accentYellow,
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  child: const Text("Add Product",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                ),
-              ),
-            ],
+        backgroundColor: Colors.pinkAccent,
+        title: Text(
+          "Add Product",
+          style: GoogleFonts.comfortaa(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Stack(
+        children: [
+          Positioned(
+            top: -80,
+            right: -80,
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.pinkAccent.withOpacity(0.12),
+                    Colors.pinkAccent.withOpacity(0.04),
+                    Colors.transparent,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -60,
+            left: -60,
+            child: Container(
+              width: 160,
+              height: 160,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.pink.shade100.withOpacity(0.15),
+                    Colors.pink.shade50.withOpacity(0.08),
+                  ],
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    style: GoogleFonts.comfortaa(color: Colors.black87),
+                    decoration: _inputDecoration("Product Name"),
+                    validator: (v) => v!.isEmpty ? "Enter product name" : null,
+                    onSaved: (v) => _name = v!,
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    maxLines: 3,
+                    style: GoogleFonts.comfortaa(color: Colors.black87),
+                    decoration: _inputDecoration("Description"),
+                    validator: (v) => v!.isEmpty ? "Enter description" : null,
+                    onSaved: (v) => _description = v!,
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    style: GoogleFonts.comfortaa(color: Colors.black87),
+                    decoration: _inputDecoration("Price (Rs)"),
+                    validator: (v) => v!.isEmpty ? "Enter price" : null,
+                    onSaved: (v) => _price = double.parse(v!),
+                  ),
+                  const SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    value: _category,
+                    dropdownColor: Colors.white,
+                    decoration: _inputDecoration("Select Category"),
+                    items: categories
+                        .map((cat) => DropdownMenuItem(
+                              value: cat,
+                              child: Text(cat, style: GoogleFonts.comfortaa(color: Colors.black87)),
+                            ))
+                        .toList(),
+                    onChanged: (val) => setState(() => _category = val),
+                    validator: (v) => v == null ? "Select category" : null,
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Column(
+                      children: [
+                        _imageUrl != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.network(_imageUrl!, height: 150),
+                              )
+                            : const Icon(Icons.image, color: Colors.black54, size: 100),
+                        const SizedBox(height: 10),
+                        _isUploading
+                            ? const CircularProgressIndicator(color: Colors.pinkAccent)
+                            : ElevatedButton.icon(
+                                onPressed: _pickImage,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.pinkAccent,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                icon: const Icon(Icons.upload),
+                                label: Text("Upload Image", style: GoogleFonts.comfortaa()),
+                              ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: _saveProduct,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.pinkAccent,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text(
+                        "Add Product",
+                        style: GoogleFonts.comfortaa(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final Map<String, dynamic>? product; // For "Buy Now"
@@ -25,30 +26,62 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   bool isLoading = false;
 
-  final Color backgroundColor = const Color(0xFF121212);
-  final Color accentYellow = const Color(0xFFFFC107);
-  final Color textFieldBg = const Color(0xFF1F1F1F);
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Checkout"),
-        backgroundColor: Colors.black,
+        title: Text(
+          "Checkout",
+          style: GoogleFonts.comfortaa(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        backgroundColor: Colors.pinkAccent,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      backgroundColor: backgroundColor,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          // Decorative Background
+          Positioned(
+            top: -50,
+            right: -50,
+            child: Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 100,
+            left: -30,
+            child: Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+              Text(
                 "Delivery Information",
-                style: TextStyle(
-                  color: Colors.white,
+                style: GoogleFonts.comfortaa(
+                  color: Colors.black87,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -68,10 +101,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
               const SizedBox(height: 25),
 
-              const Text(
+              Text(
                 "Payment Method",
-                style: TextStyle(
-                  color: Colors.white,
+                style: GoogleFonts.comfortaa(
+                  color: Colors.black87,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -85,7 +118,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               isLoading
                   ? const Center(
                       child: CircularProgressIndicator(
-                        color: Color(0xFFFFC107),
+                        color: Colors.pinkAccent,
                       ),
                     )
                   : SizedBox(
@@ -94,26 +127,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       child: ElevatedButton(
                         onPressed: _confirmOrder,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: accentYellow,
-                          foregroundColor: Colors.black,
-                          shadowColor: accentYellow.withOpacity(0.5),
+                          backgroundColor: Colors.pinkAccent,
+                          foregroundColor: Colors.white,
+                          shadowColor: Colors.pinkAccent.withOpacity(0.5),
                           elevation: 5,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           "Confirm Order",
-                          style: TextStyle(
+                          style: GoogleFonts.comfortaa(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
                         ),
                       ),
                     ),
-            ],
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -121,20 +156,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget _buildTextField(String label, IconData icon, Function(String?) onSaved,
       {TextInputType keyboard = TextInputType.text}) {
     return TextFormField(
-      style: const TextStyle(color: Colors.white),
+      style: GoogleFonts.comfortaa(color: Colors.black87),
       keyboardType: keyboard,
       decoration: InputDecoration(
         filled: true,
-        fillColor: textFieldBg,
+        fillColor: Colors.grey[50],
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.white70),
-        prefixIcon: Icon(icon, color: Colors.white70),
+        labelStyle: GoogleFonts.comfortaa(color: Colors.black54),
+        prefixIcon: Icon(icon, color: Colors.pinkAccent),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white24),
+          borderSide: BorderSide(color: Colors.grey[300]!),
           borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: accentYellow),
+          borderSide: const BorderSide(color: Colors.pinkAccent),
           borderRadius: BorderRadius.circular(10),
         ),
       ),
@@ -145,8 +180,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   Widget _paymentOption(String value) {
     return RadioListTile(
-      activeColor: accentYellow,
-      title: Text(value, style: const TextStyle(color: Colors.white)),
+      activeColor: Colors.pinkAccent,
+      title: Text(
+        value,
+        style: GoogleFonts.comfortaa(
+          color: Colors.black87,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
       value: value,
       groupValue: paymentMethod,
       onChanged: (val) {

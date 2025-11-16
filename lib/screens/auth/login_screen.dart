@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'signup_screen.dart';
 import '../../main.dart';
 import '../admin/admin_dashboard.dart';
@@ -67,194 +68,273 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // 🔹 Background gradient
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [const Color.fromARGB(255, 255, 255, 255), const Color.fromARGB(255, 255, 225, 248)!],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          // Enhanced Decorative Background
+          Positioned(
+            top: -100,
+            right: -100,
+            child: Container(
+              width: 250,
+              height: 250,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.pinkAccent.withOpacity(0.15),
+                    Colors.pinkAccent.withOpacity(0.05),
+                    Colors.transparent,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 200,
+            left: -80,
+            child: Container(
+              width: 180,
+              height: 180,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.pink.shade100.withOpacity(0.2),
+                    Colors.pink.shade50.withOpacity(0.1),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(40),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -60,
+            right: -60,
+            child: Container(
+              width: 160,
+              height: 160,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.pinkAccent.withOpacity(0.12),
+                    Colors.transparent,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 350,
+            right: 30,
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: Colors.pink.shade50.withOpacity(0.4),
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 200,
+            left: 40,
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent.withOpacity(0.1),
+                shape: BoxShape.circle,
               ),
             ),
           ),
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
-                  padding: EdgeInsets.all(30),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                // Logo Section
+                Container(
+                  width: 120,
+                  height: 120,
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color.fromARGB(255, 254, 183, 255).withOpacity(0.3),
-                        blurRadius: 25,
-                        offset: Offset(0, 15),
-                      ),
-                    ],
+                    color: Colors.pinkAccent.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(60),
                   ),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // 🔹 Logo/Title
-                        Text(
-                          "Baby Shop",
-                          style: TextStyle(
-                            color: const Color.fromARGB(255, 255, 115, 255),
-                            fontSize: 38,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(60),
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.baby_changing_station,
+                        color: Colors.pinkAccent,
+                        size: 60,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                
+                // Title
+                Text(
+                  "Welcome Back!",
+                  style: GoogleFonts.comfortaa(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Sign in to your BabyShop account",
+                  style: GoogleFonts.comfortaa(
+                    fontSize: 16,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+                const SizedBox(height: 40),
+
+                // Form
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      // Email Field
+                      TextFormField(
+                        style: GoogleFonts.comfortaa(color: Colors.black87),
+                        decoration: InputDecoration(
+                          labelText: "Email",
+                          labelStyle: GoogleFonts.comfortaa(color: Colors.grey.shade600),
+                          prefixIcon: const Icon(Icons.email_outlined, color: Colors.pinkAccent),
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(color: Colors.pinkAccent, width: 2),
                           ),
                         ),
-                        SizedBox(height: 8),
-                        Text(
-                          "Sign in to continue",
-                          style: TextStyle(color: Colors.white70, fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 30),
+                        onSaved: (value) => email = value ?? '',
+                      ),
+                      const SizedBox(height: 20),
 
-                        // 🔹 Email field
-                        TextFormField(
-                          style: TextStyle(color: Colors.white),
-                          decoration: _inputDecoration(
-                              hint: "Email", icon: Icons.email),
-                          onSaved: (value) => email = value ?? '',
+                      // Password Field
+                      TextFormField(
+                        obscureText: true,
+                        style: GoogleFonts.comfortaa(color: Colors.black87),
+                        decoration: InputDecoration(
+                          labelText: "Password",
+                          labelStyle: GoogleFonts.comfortaa(color: Colors.grey.shade600),
+                          prefixIcon: const Icon(Icons.lock_outline, color: Colors.pinkAccent),
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(color: Colors.pinkAccent, width: 2),
+                          ),
                         ),
-                        SizedBox(height: 20),
+                        onSaved: (value) => password = value ?? '',
+                      ),
+                      const SizedBox(height: 16),
 
-                        // 🔹 Password field
-                        TextFormField(
-                          obscureText: true,
-                          style: TextStyle(color: Colors.white),
-                          decoration: _inputDecoration(
-                              hint: "Password", icon: Icons.lock),
-                          onSaved: (value) => password = value ?? '',
+                      // Forgot Password
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => ForgotPasswordScreen()),
+                            );
+                          },
+                          child: Text(
+                            "Forgot Password?",
+                            style: GoogleFonts.comfortaa(
+                              color: Colors.pinkAccent,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
-                        SizedBox(height: 15),
+                      ),
+                      const SizedBox(height: 24),
 
-                        // 🔹 Forgot password
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
+                      // Login Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: _loading
+                            ? const Center(
+                                child: CircularProgressIndicator(color: Colors.pinkAccent),
+                              )
+                            : ElevatedButton(
+                                onPressed: _login,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.pinkAccent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  elevation: 0,
+                                ),
+                                child: Text(
+                                  "Sign In",
+                                  style: GoogleFonts.comfortaa(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                      ),
+                      const SizedBox(height: 32),
+
+                      // Sign Up Link
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Don't have an account? ",
+                            style: GoogleFonts.comfortaa(
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          TextButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (_) => ForgotPasswordScreen()),
+                                MaterialPageRoute(builder: (_) => SignupScreen()),
                               );
                             },
                             child: Text(
-                              "Forgot Password?",
-                              style: TextStyle(
-                                  color: const Color.fromARGB(255, 242, 59, 255),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-
-                        // 🔹 Login button
-                        SizedBox(
-                          width: double.infinity,
-                          height: 55,
-                          child: _loading
-                              ? Center(
-                                  child: CircularProgressIndicator(
-                                  color: const Color.fromARGB(255, 255, 141, 232),
-                                ))
-                              : ElevatedButton(
-                                  onPressed: _login,
-                                  style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.all(0),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                  child: Ink(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          const Color.fromARGB(255, 255, 103, 219),
-                                          const Color.fromARGB(255, 255, 33, 255)
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Login",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: const Color.fromARGB(255, 255, 255, 255),
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                        ),
-                        SizedBox(height: 25),
-
-                        // 🔹 Signup link
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Don't have an account?",
-                              style: TextStyle(color: const Color.fromARGB(179, 99, 99, 99)),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => SignupScreen()),
-                                );
-                              },
-                              child: Text(
-                                "Sign Up",
-                                style: TextStyle(
-                                  color: const Color.fromARGB(255, 255, 59, 229),
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              "Sign Up",
+                              style: GoogleFonts.comfortaa(
+                                color: Colors.pinkAccent,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
+                ),
+                  ],
                 ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  InputDecoration _inputDecoration({required String hint, required IconData icon}) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: TextStyle(color: const Color.fromARGB(137, 255, 95, 252)),
-      filled: true,
-      fillColor: const Color.fromARGB(255, 233, 233, 233),
-      prefixIcon: Icon(icon, color: const Color.fromARGB(255, 248, 110, 255)),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: const Color.fromARGB(255, 248, 110, 255), width: 2),
       ),
     );
   }

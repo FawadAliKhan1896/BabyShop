@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../cart/checkout_screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -53,18 +54,59 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final category = product['category'] ?? '';
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.pinkAccent,
         elevation: 0,
         title: Text(
           product["name"] ?? 'Unnamed',
-          style: const TextStyle(color: Colors.white, fontSize: 18),
+          style: GoogleFonts.comfortaa(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Stack(
         children: [
+          // Decorative Background
+          Positioned(
+            top: -50,
+            right: -50,
+            child: Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 100,
+            left: -30,
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 200,
+            right: -40,
+            child: Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent.withOpacity(0.12),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
           SingleChildScrollView(
             padding: const EdgeInsets.only(bottom: 100),
             child: Column(
@@ -104,8 +146,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         width: _currentImage == entry.key ? 20 : 8,
                         decoration: BoxDecoration(
                           color: _currentImage == entry.key
-                              ? Colors.yellow
-                              : Colors.grey,
+                              ? Colors.pinkAccent
+                              : Colors.grey[300],
                           borderRadius: BorderRadius.circular(10),
                         ),
                       );
@@ -120,36 +162,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                       Text(
                         product["name"] ?? 'Unnamed',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold),
+                        style: GoogleFonts.comfortaa(
+                          color: Colors.black87,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         "Rs ${product["price"] ?? 0}",
-                        style: const TextStyle(
-                            color: Colors.yellow,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600),
+                        style: GoogleFonts.comfortaa(
+                          color: Colors.pinkAccent,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: 15),
                       Text(
                         product["description"] ??
                             "No description available for this product.",
-                        style: const TextStyle(
-                            color: Colors.white70, height: 1.5, fontSize: 15),
+                        style: GoogleFonts.comfortaa(
+                          color: Colors.black54,
+                          height: 1.5,
+                          fontSize: 15,
+                        ),
                       ),
                       const SizedBox(height: 25),
-                      const Divider(color: Colors.white24),
-                      const Padding(
-                        padding: EdgeInsets.all(12.0),
+                      Divider(color: Colors.pinkAccent.withOpacity(0.3)),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
                         child: Text(
                           "You may also like",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
+                          style: GoogleFonts.comfortaa(
+                            color: Colors.black87,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
 
@@ -164,7 +212,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           if (!snapshot.hasData) {
                             return const Center(
                                 child: CircularProgressIndicator(
-                                    color: Colors.yellow));
+                                    color: Colors.pinkAccent));
                           }
 
                           final products = snapshot.data!.docs
@@ -173,12 +221,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               .toList();
 
                           if (products.isEmpty) {
-                            return const Center(
+                            return Center(
                               child: Padding(
-                                padding: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 child: Text(
                                   "No similar products found",
-                                  style: TextStyle(color: Colors.white54),
+                                  style: GoogleFonts.comfortaa(
+                                    color: Colors.black54,
+                                  ),
                                 ),
                               ),
                             );
@@ -206,8 +256,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 8),
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[900],
+                                      color: Colors.white,
                                       borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.pinkAccent.withOpacity(0.1),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
                                     ),
                                     child: Column(
                                       crossAxisAlignment:
@@ -227,7 +284,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                               errorBuilder: (_, __, ___) =>
                                                   const Icon(
                                                 Icons.image_not_supported,
-                                                color: Colors.white54,
+                                                color: Colors.black54,
                                               ),
                                             ),
                                           ),
@@ -241,23 +298,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                               Expanded(
                                                 child: Text(
                                                   item['name'] ?? '',
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 13),
+                                                  style: GoogleFonts.comfortaa(
+                                                    color: Colors.black87,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 13,
+                                                  ),
                                                   maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                  overflow: TextOverflow.ellipsis,
                                                 ),
                                               ),
                                               Text(
                                                 "Rs ${item['price'] ?? 0}",
-                                                style: const TextStyle(
-                                                    color: Colors.yellow,
-                                                    fontSize: 13,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                style: GoogleFonts.comfortaa(
+                                                  color: Colors.pinkAccent,
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -286,11 +342,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.grey[900]?.withOpacity(0.95),
+                color: Colors.white.withOpacity(0.95),
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.yellow.withOpacity(0.15),
+                    color: Colors.pinkAccent.withOpacity(0.15),
                     blurRadius: 6,
                     offset: const Offset(0, 3),
                   )
@@ -301,13 +357,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   // Quantity Selector
                   Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.yellow, width: 1.2),
+                      border: Border.all(color: Colors.pinkAccent, width: 1.2),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.remove, color: Colors.yellow),
+                          icon: const Icon(Icons.remove, color: Colors.pinkAccent),
                           onPressed: () {
                             if (_quantity > 1) {
                               setState(() => _quantity--);
@@ -316,13 +372,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         Text(
                           '$_quantity',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                          style: GoogleFonts.comfortaa(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.add, color: Colors.yellow),
+                          icon: const Icon(Icons.add, color: Colors.pinkAccent),
                           onPressed: () {
                             setState(() => _quantity++);
                           },
@@ -337,18 +394,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: ElevatedButton(
                       onPressed: _addToCart,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.yellow,
+                        backgroundColor: Colors.pinkAccent,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         "Add to Cart",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
+                        style: GoogleFonts.comfortaa(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -390,10 +448,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     await docRef.set({'items': items});
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: Colors.yellow,
+        backgroundColor: Colors.pinkAccent,
         content: Text(
           "${widget.product['name']} added to cart!",
-          style: const TextStyle(color: Colors.black),
+          style: GoogleFonts.comfortaa(
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );

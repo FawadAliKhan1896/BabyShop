@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -37,8 +38,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Name updated successfully!"),
-            backgroundColor: Colors.greenAccent,
+            content: Text("Profile updated successfully!"),
+            backgroundColor: Colors.pinkAccent,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -48,7 +49,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.message ?? "Failed to update name"),
+          content: Text(e.message ?? "Failed to update profile"),
           backgroundColor: Colors.redAccent,
         ),
       );
@@ -65,21 +66,89 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const Color backgroundColor = Color(0xFF121212);
-    const Color fieldBackground = Color(0xFF1E1E1E);
-    const Color accentYellow = Color(0xFFFFC107);
+    const Color backgroundColor = Colors.white;
+    const Color fieldBackground = Colors.white;
+    const Color accentPink = Colors.pinkAccent;
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text(
+        backgroundColor: Colors.pinkAccent,
+        title: Text(
           "Edit Profile",
-          style: TextStyle(color: Colors.white),
+          style: GoogleFonts.comfortaa(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Padding(
+      body: Stack(
+        children: [
+          // Enhanced Decorative Background
+          Positioned(
+            top: -70,
+            right: -60,
+            child: Container(
+              width: 160,
+              height: 160,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.pinkAccent.withOpacity(0.12),
+                    Colors.pinkAccent.withOpacity(0.04),
+                    Colors.transparent,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -40,
+            left: -50,
+            child: Container(
+              width: 140,
+              height: 140,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.pink.shade100.withOpacity(0.15),
+                    Colors.pink.shade50.withOpacity(0.08),
+                  ],
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                ),
+                borderRadius: BorderRadius.circular(25),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 200,
+            left: 20,
+            child: Container(
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                color: Colors.pink.shade50.withOpacity(0.4),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 150,
+            right: 30,
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(
           key: _formKey,
@@ -89,7 +158,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               const Text(
                 "Update your name",
                 style: TextStyle(
-                    color: Colors.white70,
+                    color: Colors.black87,
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
@@ -98,22 +167,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               // Name Field
               TextFormField(
                 controller: _nameController,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
+                style: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration(
                   labelText: "Full Name",
-                  labelStyle: const TextStyle(color: Colors.white70),
-                  filled: true,
-                  fillColor: fieldBackground,
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white24),
-                      borderRadius: BorderRadius.circular(10)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: accentYellow),
-                      borderRadius: BorderRadius.circular(10)),
-                  prefixIcon: const Icon(Icons.person, color: Colors.white70),
+                  border: OutlineInputBorder(),
                 ),
                 validator: (value) =>
-                    value == null || value.isEmpty ? "Enter your name" : null,
+                    value == null || value.isEmpty ? "Please enter your name" : null,
               ),
               const SizedBox(height: 20),
 
@@ -121,49 +181,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               TextFormField(
                 initialValue: _email,
                 readOnly: true,
-                style: const TextStyle(color: Colors.white70),
-                decoration: InputDecoration(
-                  labelText: "Email (Not Editable)",
-                  labelStyle: const TextStyle(color: Colors.white54),
-                  filled: true,
-                  fillColor: fieldBackground,
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white24),
-                      borderRadius: BorderRadius.circular(10)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white24),
-                      borderRadius: BorderRadius.circular(10)),
-                  prefixIcon: const Icon(Icons.email, color: Colors.white54),
+                style: const TextStyle(color: Colors.black54),
+                decoration: const InputDecoration(
+                  labelText: "Email Address",
+                  border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 40),
 
               // Save Button
-              SizedBox(
-                width: double.infinity,
-                height: 50,
+              ElevatedButton(
+                onPressed: _isLoading ? null : _updateProfile,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: accentPink,
+                  minimumSize: const Size(double.infinity, 50),
+                ),
                 child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(color: accentYellow))
-                    : ElevatedButton(
-                        onPressed: _updateProfile,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: accentYellow,
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: const Text(
-                          "Save Changes",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text(
+                        "Save Changes",
+                        style: TextStyle(color: Colors.white),
                       ),
               ),
             ],
           ),
         ),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import '../auth/login_screen.dart';
 import 'product_list.dart';
 import 'add_product.dart';
@@ -31,117 +32,96 @@ class AdminDashboardScreen extends StatelessWidget {
     );
   }
 
-  final Color backgroundColor = const Color(0xFF1E1E1E);
-  final Color cardColor = const Color(0xFF2B2B2B);
-  final Color accentYellow = const Color(0xFFFFC107);
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
-        backgroundColor: backgroundColor,
-        elevation: 0,
-        title: const Text(
-          "Admin Dashboard",
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout, color: Colors.redAccent),
-            tooltip: "Logout",
-            onPressed: () => _logout(context),
-          ),
-        ],
+  return Scaffold(
+  backgroundColor: Colors.white,
+  appBar: AppBar(
+    title: const Text("Admin Dashboard"),
+    backgroundColor: Colors.pinkAccent,
+    actions: [
+      IconButton(
+        icon: const Icon(Icons.logout, color: Colors.white),
+        onPressed: () => _logout(context),
       ),
-      body: FutureBuilder<List<int>>(
+    ],
+  ),
+  body: FutureBuilder<List<int>>(
+
         future: Future.wait([_getProductCount(), _getOrderCount()]),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
-                child: CircularProgressIndicator(color: Colors.yellow));
+                child: CircularProgressIndicator(color: Colors.pinkAccent));
           }
 
           final productCount = snapshot.data![0];
           final orderCount = snapshot.data![1];
 
           return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.all(20.0),
+            child: GridView.count(
+              crossAxisCount: 2,
+              crossAxisSpacing: 15,
+              mainAxisSpacing: 15,
               children: [
-                const Text(
-                  "Welcome, Admin",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                _buildDashboardTile(
+                  icon: Icons.shopping_bag,
+                  label: "Manage Products",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => AdminProductListScreen()),
+                    );
+                  },
                 ),
-                const SizedBox(height: 30),
-
-                // Dashboard Summary
-                Row(
-                  children: [
-                    _buildStatCard(
-                        "Total Products", productCount.toString(), Icons.watch),
-                    const SizedBox(width: 20),
-                    _buildStatCard(
-                        "Total Orders", orderCount.toString(), Icons.receipt_long),
-                  ],
+                _buildDashboardTile(
+                  icon: Icons.add_box,
+                  label: "Add Product",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const AdminAddProductScreen()),
+                    );
+                  },
                 ),
-                const SizedBox(height: 30),
+                _buildDashboardTile(
+                  icon: Icons.receipt_long,
+                  label: "View Orders",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const AdminOrdersScreen()),
+                    );
+                  },
+                ),
+                _buildDashboardTile(
+                  icon: Icons.analytics,
+                  label: "Reports",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const AdminReportsScreen()),
+                    );
+                  },
+                ),
 
-                // Admin Actions
-                Expanded(
-                  child: ListView(
-                    children: [
-                      _buildActionTile(
-                        context,
-                        Icons.add_box,
-                        "Add New Product",
-                        const AdminAddProductScreen(),
-                      ),
-                      _buildActionTile(
-                        context,
-                        Icons.list_alt,
-                        "Manage Products",
-                        AdminProductListScreen(),
-                      ),
-                      _buildActionTile(
-                        context,
-                        Icons.receipt_long_outlined,
-                        "View Orders",
-                        const AdminOrdersScreen(),
-                      ),
-                      _buildActionTile(
-                        context,
-                        Icons.analytics_outlined,
-                        "View Reports & Analytics",
-                        const AdminReportsScreen(),
-                      ),
-                      const SizedBox(height: 20),
+                // Product Count
+                _buildStatTile(
+                  icon: Icons.inventory_2,
+                  label: "Products",
+                  value: productCount.toString(),
+                ),
 
-                      // Logout Card
-                      Card(
-                        color: Colors.redAccent.withOpacity(0.1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        child: ListTile(
-                          leading:
-                              const Icon(Icons.logout, color: Colors.redAccent),
-                          title: const Text(
-                            "Logout",
-                            style: TextStyle(
-                                color: Colors.redAccent,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          onTap: () => _logout(context),
-                        ),
-                      ),
-                    ],
-                  ),
+                // Order Count
+                _buildStatTile(
+                  icon: Icons.shopping_cart,
+                  label: "Orders",
+                  value: orderCount.toString(),
                 ),
               ],
             ),
@@ -151,61 +131,70 @@ class AdminDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon) {
-    return Expanded(
-      child: Container(
-        height: 130,
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              blurRadius: 6,
-              offset: const Offset(0, 4),
-            )
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: accentYellow, size: 32),
-            const SizedBox(height: 10),
-            Text(value,
+  Widget _buildDashboardTile({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        color: Colors.pinkAccent.shade100,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, color: Colors.white, size: 50),
+              const SizedBox(height: 10),
+              Text(
+                label,
                 style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold)),
-            const SizedBox(height: 4),
-            Text(title,
-                style: const TextStyle(color: Colors.white70, fontSize: 14)),
-          ],
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildActionTile(
-      BuildContext context, IconData icon, String title, Widget? screen) {
+  // Stat boxes same design but different style
+  Widget _buildStatTile({
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
     return Card(
-      color: cardColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: ListTile(
-        leading: Icon(icon, color: accentYellow),
-        title: Text(title,
-            style: const TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w500)),
-        trailing: const Icon(Icons.arrow_forward_ios,
-            color: Colors.white70, size: 18),
-        onTap: screen == null
-            ? null
-            : () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => screen),
-                );
-              },
+      color: Colors.pinkAccent.shade200,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: Colors.white, size: 45),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

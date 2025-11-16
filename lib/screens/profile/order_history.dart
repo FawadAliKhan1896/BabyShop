@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OrderHistoryScreen extends StatelessWidget {
   const OrderHistoryScreen({super.key});
@@ -8,9 +9,9 @@ class OrderHistoryScreen extends StatelessWidget {
   Color _getStatusColor(String status) {
     switch (status) {
       case "Delivered":
-        return Colors.greenAccent;
+        return Colors.green;
       case "Shipped":
-        return const Color(0xFFFFC107); // Yellow accent
+        return Colors.pinkAccent;
       case "Cancelled":
         return Colors.redAccent;
       default:
@@ -21,18 +22,105 @@ class OrderHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    const Color backgroundColor = Color(0xFF121212);
-    const Color cardColor = Color(0xFF1E1E1E);
-    const Color accentYellow = Color(0xFFFFC107);
+    const Color backgroundColor = Colors.white;
+    const Color cardColor = Colors.grey;
+    const Color accentPink = Colors.pinkAccent;
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text("Order History", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
+        title: Text(
+          "Order History",
+          style: GoogleFonts.comfortaa(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.pinkAccent,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: StreamBuilder<QuerySnapshot>(
+      body: Stack(
+        children: [
+          // Enhanced Decorative Background
+          Positioned(
+            top: -75,
+            right: -70,
+            child: Container(
+              width: 190,
+              height: 190,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.pinkAccent.withOpacity(0.12),
+                    Colors.pinkAccent.withOpacity(0.04),
+                    Colors.transparent,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 120,
+            left: -60,
+            child: Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.pink.shade100.withOpacity(0.2),
+                    Colors.pink.shade50.withOpacity(0.1),
+                  ],
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                ),
+                borderRadius: BorderRadius.circular(35),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 200,
+            left: 30,
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.pink.shade50.withOpacity(0.4),
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 300,
+            right: 20,
+            child: Container(
+              width: 35,
+              height: 35,
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 350,
+            right: -15,
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.pinkAccent.withOpacity(0.08),
+                    Colors.transparent,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('orders')
             .where('userId', isEqualTo: user?.uid)
@@ -40,7 +128,7 @@ class OrderHistoryScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(color: accentYellow),
+              child: CircularProgressIndicator(color: accentPink),
             );
           }
 
@@ -48,7 +136,7 @@ class OrderHistoryScreen extends StatelessWidget {
             return const Center(
               child: Text(
                 "No orders found.",
-                style: TextStyle(color: Colors.white70, fontSize: 16),
+                style: TextStyle(color: Colors.black54, fontSize: 16),
               ),
             );
           }
@@ -63,18 +151,11 @@ class OrderHistoryScreen extends StatelessWidget {
               final orderId = orders[index].id;
               final items = List<Map<String, dynamic>>.from(order['items'] ?? []);
 
-              return Container(
+              return Card(
                 margin: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  color: cardColor,
+                elevation: 2,
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: accentYellow.withOpacity(0.15),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -88,13 +169,13 @@ class OrderHistoryScreen extends StatelessWidget {
                           Expanded(
                             child: Text("#$orderId",
                                 style: const TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16),
                                 overflow: TextOverflow.ellipsis),
                           ),
                           Text(order["paymentMethod"] ?? "",
-                              style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                              style: const TextStyle(color: Colors.black87, fontSize: 12)),
                         ],
                       ),
                       const Divider(color: Colors.white12, height: 20),
@@ -124,7 +205,7 @@ class OrderHistoryScreen extends StatelessWidget {
                                     Text(
                                       item["name"] ?? "",
                                       style: const TextStyle(
-                                          color: Colors.white70,
+                                          color: Colors.black87,
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14),
                                       overflow: TextOverflow.ellipsis,
@@ -132,13 +213,13 @@ class OrderHistoryScreen extends StatelessWidget {
                                     const SizedBox(height: 4),
                                     Text("x${item["qty"] ?? 1}",
                                         style: const TextStyle(
-                                            color: Colors.white54, fontSize: 13)),
+                                            color: Colors.black54, fontSize: 13)),
                                   ],
                                 ),
                               ),
                               Text("Rs ${item["price"] ?? 0}",
                                   style: const TextStyle(
-                                      color: accentYellow,
+                                      color: accentPink,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14)),
                             ],
@@ -154,7 +235,7 @@ class OrderHistoryScreen extends StatelessWidget {
                         children: [
                           Text("Total: Rs ${order["total"] ?? 0}",
                               style: const TextStyle(
-                                  color: accentYellow,
+                                  color: accentPink,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15)),
                           Container(
@@ -178,6 +259,8 @@ class OrderHistoryScreen extends StatelessWidget {
             },
           );
         },
+          ),
+        ],
       ),
     );
   }

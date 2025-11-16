@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'checkout_screen.dart';
 
 class CartScreen extends StatefulWidget {
@@ -15,27 +16,31 @@ class _CartScreenState extends State<CartScreen> {
   final cartCollection = FirebaseFirestore.instance.collection('carts');
   final wishlistCollection = FirebaseFirestore.instance.collection('wishlists');
 
-  final Color accentYellow = const Color(0xFFFFC107);
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.pinkAccent,
         elevation: 0,
-        title: const Text(
+        title: Text(
           "My Cart 🛒",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: GoogleFonts.comfortaa(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: cartCollection.doc(user!.uid).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFFFC107)),
+              child: CircularProgressIndicator(color: Colors.pinkAccent),
             );
           }
 
@@ -45,10 +50,13 @@ class _CartScreenState extends State<CartScreen> {
               List<Map<String, dynamic>>.from(cartData['items']);
 
           if (cartItems.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 "Your cart is empty",
-                style: TextStyle(color: Colors.white70),
+                style: GoogleFonts.comfortaa(
+                  color: Colors.black54,
+                  fontSize: 16,
+                ),
               ),
             );
           }
@@ -63,6 +71,31 @@ class _CartScreenState extends State<CartScreen> {
 
           return Stack(
             children: [
+              // Decorative Background
+              Positioned(
+                top: -50,
+                right: -50,
+                child: Container(
+                  width: 150,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.pinkAccent.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 200,
+                left: -30,
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Colors.pinkAccent.withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 100), // space for button
                 child: ListView.builder(
@@ -74,11 +107,11 @@ class _CartScreenState extends State<CartScreen> {
                     return Container(
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
-                        color: Colors.grey[900],
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: accentYellow.withOpacity(0.2),
+                            color: Colors.pinkAccent.withOpacity(0.15),
                             blurRadius: 10,
                             spreadRadius: 1,
                             offset: const Offset(0, 4),
@@ -118,8 +151,8 @@ class _CartScreenState extends State<CartScreen> {
                                     children: [
                                       Text(
                                         item['name'],
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                        style: GoogleFonts.comfortaa(
+                                          color: Colors.black87,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
                                         ),
@@ -129,8 +162,8 @@ class _CartScreenState extends State<CartScreen> {
                                       const SizedBox(height: 6),
                                       Text(
                                         "Rs ${(item['price'] as num).toDouble().toStringAsFixed(2)}",
-                                        style: TextStyle(
-                                          color: accentYellow,
+                                        style: GoogleFonts.comfortaa(
+                                          color: Colors.pinkAccent,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 14,
                                         ),
@@ -149,9 +182,10 @@ class _CartScreenState extends State<CartScreen> {
                                                         horizontal: 8.0),
                                                 child: Text(
                                                   "${item['qty']}",
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
+                                                  style: GoogleFonts.comfortaa(
+                                                    color: Colors.black87,
                                                     fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
                                                   ),
                                                 ),
                                               ),
@@ -184,7 +218,7 @@ class _CartScreenState extends State<CartScreen> {
                                 item['isWishlisted'] == true
                                     ? Icons.favorite
                                     : Icons.favorite_border,
-                                color: accentYellow,
+                                color: Colors.pinkAccent,
                               ),
                               onPressed: () =>
                                   _toggleWishlist(item, index, cartItems),
@@ -205,13 +239,13 @@ class _CartScreenState extends State<CartScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     gradient: LinearGradient(
-                      colors: [accentYellow.withOpacity(0.9), accentYellow],
+                      colors: [Colors.pinkAccent.withOpacity(0.9), Colors.pinkAccent],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: accentYellow.withOpacity(0.6),
+                        color: Colors.pinkAccent.withOpacity(0.4),
                         blurRadius: 12,
                         spreadRadius: 1,
                         offset: const Offset(0, 3),
@@ -233,12 +267,12 @@ class _CartScreenState extends State<CartScreen> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Proceed to Checkout",
-                      style: TextStyle(
+                      style: GoogleFonts.comfortaa(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -257,13 +291,13 @@ class _CartScreenState extends State<CartScreen> {
       child: Container(
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          color: Color(0xFFFFC107),
+          color: Colors.pinkAccent,
         ),
         padding: const EdgeInsets.all(5),
         child: Icon(
           change > 0 ? Icons.add : Icons.remove,
           size: 18,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
     );

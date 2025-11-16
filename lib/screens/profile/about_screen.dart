@@ -1,22 +1,110 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AboutUsScreen extends StatelessWidget {
   const AboutUsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const Color backgroundColor = Color(0xFF121212); // body ke liye dark grey
-    const Color cardColor = Color(0xFF1E1E1E); // content ke liye slightly lighter grey
-    const Color accentYellow = Color(0xFFFFC107); // primary accent
+    const Color backgroundColor = Colors.white;
+    const Color cardColor = Colors.white;
+    const Color accentPink = Colors.pinkAccent;
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.pinkAccent,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text("About Us", style: TextStyle(color: Colors.white)),
+        title: Text(
+          "About Us",
+          style: GoogleFonts.comfortaa(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-      body: SingleChildScrollView(
+      body: Stack(
+        children: [
+          // Enhanced Decorative Background
+          Positioned(
+            top: -60,
+            left: -70,
+            child: Container(
+              width: 180,
+              height: 180,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.pinkAccent.withOpacity(0.12),
+                    Colors.pinkAccent.withOpacity(0.04),
+                    Colors.transparent,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 180,
+            right: -50,
+            child: Container(
+              width: 130,
+              height: 130,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.pink.shade100.withOpacity(0.15),
+                    Colors.pink.shade50.withOpacity(0.08),
+                  ],
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                ),
+                borderRadius: BorderRadius.circular(25),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 80,
+            left: -30,
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.pinkAccent.withOpacity(0.1),
+                    Colors.transparent,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 350,
+            left: 50,
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.pink.shade50.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 200,
+            right: 40,
+            child: Container(
+              width: 35,
+              height: 35,
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent.withOpacity(0.08),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,12 +112,20 @@ class AboutUsScreen extends StatelessWidget {
             Center(
               child: Column(
                 children: [
-                  Image.asset("assets/images/watch.jpg", width: 120),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(60),
+                    child: Image.asset(
+                      "assets/images/logo.png",
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   const SizedBox(height: 10),
-                  const Text(
-                    "WatchHub",
-                    style: TextStyle(
-                      color: accentYellow,
+                  Text(
+                    "Baby Shop",
+                    style: GoogleFonts.comfortaa(
+                      color: accentPink,
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
@@ -37,8 +133,8 @@ class AboutUsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    "STREAMLINE YOUR LIFE WITH TIMEFLOW",
-                    style: TextStyle(color: Colors.white54, fontSize: 13),
+                    "Everything Your Baby Needs, All in One Place",
+                    style: TextStyle(color: Colors.black54, fontSize: 13),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -57,17 +153,17 @@ class AboutUsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
                   Text(
-                    "About WatchHub",
+                    "About Baby Shop",
                     style: TextStyle(
-                        color: accentYellow,
+                        color: accentPink,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "WatchHub is your go-to destination for premium, stylish, and modern watches. "
-                    "We bring together elegance and technology, offering a wide range of smart, luxury, and sports watches for every lifestyle.",
-                    style: TextStyle(color: Colors.white70, height: 1.5),
+                    "Baby Shop is your trusted destination for premium baby products. "
+                    "We offer everything your baby needs, from diapers and food to toys and care products, all in one convenient place.",
+                    style: TextStyle(color: Colors.black87, height: 1.5),
                   ),
                   SizedBox(height: 20),
 
@@ -75,15 +171,15 @@ class AboutUsScreen extends StatelessWidget {
                   Text(
                     "Our Mission",
                     style: TextStyle(
-                        color: accentYellow,
+                        color: accentPink,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Our mission is to provide customers with high-quality watches "
-                    "that blend innovation, durability, and sophistication. We aim to redefine timekeeping through design and performance.",
-                    style: TextStyle(color: Colors.white70, height: 1.5),
+                    "Our mission is to provide parents with high-quality baby products "
+                    "that ensure safety, comfort, and happiness for their little ones. We aim to support families with trusted products.",
+                    style: TextStyle(color: Colors.black87, height: 1.5),
                   ),
                   SizedBox(height: 20),
 
@@ -91,7 +187,7 @@ class AboutUsScreen extends StatelessWidget {
                   Text(
                     "Contact Us",
                     style: TextStyle(
-                        color: accentYellow,
+                        color: accentPink,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
@@ -113,28 +209,28 @@ class AboutUsScreen extends StatelessWidget {
                 children: const [
                   Row(
                     children: [
-                      Icon(Icons.email, color: accentYellow),
+                      Icon(Icons.email, color: accentPink),
                       SizedBox(width: 10),
-                      Text("support@watchhub.com",
-                          style: TextStyle(color: Colors.white70)),
+                      Text("support@babyshop.com",
+                          style: TextStyle(color: Colors.black87)),
                     ],
                   ),
                   SizedBox(height: 10),
                   Row(
                     children: [
-                      Icon(Icons.phone, color: accentYellow),
+                      Icon(Icons.phone, color: accentPink),
                       SizedBox(width: 10),
                       Text("+92 312 5552565",
-                          style: TextStyle(color: Colors.white70)),
+                          style: TextStyle(color: Colors.black87)),
                     ],
                   ),
                   SizedBox(height: 10),
                   Row(
                     children: [
-                      Icon(Icons.location_on, color: accentYellow),
+                      Icon(Icons.location_on, color: accentPink),
                       SizedBox(width: 10),
                       Text("Karachi, Pakistan",
-                          style: TextStyle(color: Colors.white70)),
+                          style: TextStyle(color: Colors.black87)),
                     ],
                   ),
                 ],
@@ -142,6 +238,8 @@ class AboutUsScreen extends StatelessWidget {
             ),
           ],
         ),
+          ),
+        ],
       ),
     );
   }
