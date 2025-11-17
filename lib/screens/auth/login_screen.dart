@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: password.trim(),
       );
 
-      if (email.trim() == "admin@gmail.com") {
+      if (email.trim() == "test@gmail.com") {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => AdminDashboardScreen()),

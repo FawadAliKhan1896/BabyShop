@@ -79,12 +79,17 @@ class AdminDashboardScreen extends StatelessWidget {
                 _buildDashboardTile(
                   icon: Icons.add_box,
                   label: "Add Product",
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (_) => const AdminAddProductScreen()),
                     );
+                    // Refresh the dashboard if product was added
+                    if (result == true) {
+                      // Force rebuild by calling setState if this was a StatefulWidget
+                      // For now, the FutureBuilder will handle the refresh
+                    }
                   },
                 ),
                 _buildDashboardTile(

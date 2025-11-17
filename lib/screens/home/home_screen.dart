@@ -448,7 +448,6 @@ class _HomeScreenState extends State<HomeScreen> {
         return StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('products')
-              .orderBy('createdAt', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

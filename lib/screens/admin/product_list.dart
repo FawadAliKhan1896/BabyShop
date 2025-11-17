@@ -54,7 +54,7 @@ class AdminProductListScreen extends StatelessWidget {
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: productsRef.orderBy('createdAt', descending: true).snapshots(),
+        stream: productsRef.snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator(color: Colors.pinkAccent));

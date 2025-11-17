@@ -67,6 +67,9 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
       if (!kIsWeb) {
         final url = await uploadImageToCloudinary(File(picked.path));
         if (url != null) _imageUrl = url;
+      } else {
+        // Web: use temporary local path or placeholder
+        _imageUrl = picked.path;
       }
     } finally {
       setState(() => _isUploading = false);
@@ -74,32 +77,48 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
   }
 
   Future<void> _saveProduct() async {
-    if (!_formKey.currentState!.validate() || _imageUrl == null || _category == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.pinkAccent,
-          content: Text(
-            "Please fill all fields, select category & upload image",
-            style: GoogleFonts.comfortaa(color: Colors.white),
-          ),
-        ),
-      );
+    if (!_formKey.currentState!.validate()) {
       return;
     }
 
     _formKey.currentState!.save();
+    
+    // Set defaults if not provided
+    _imageUrl ??= "https://picsum.photos/300/300";
+    _category ??= "Baby Toys";
+    
     setState(() => _isUploading = true);
 
     try {
-      await _firestore.collection('products').add({
+      // Test Firestore connection first
+      await _firestore.enableNetwork();
+      
+      final docRef = await _firestore.collection('products').add({
         'name': _name,
         'description': _description,
         'price': _price,
         'imageUrl': _imageUrl,
         'category': _category,
-        'createdAt': FieldValue.serverTimestamp(),
+        'createdAt': DateTime.now(),
       });
+      
+      print('Product saved with ID: ${docRef.id}');
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green,
+          content: Text("Product added successfully!", style: GoogleFonts.comfortaa(color: Colors.white)),
+        ),
+      );
       Navigator.pop(context);
+    } catch (e) {
+      print('Error saving product: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Error: $e", style: GoogleFonts.comfortaa(color: Colors.white)),
+        ),
+      );
     } finally {
       setState(() => _isUploading = false);
     }
@@ -200,7 +219,7 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                     style: GoogleFonts.comfortaa(color: Colors.black87),
                     decoration: _inputDecoration("Price (Rs)"),
                     validator: (v) => v!.isEmpty ? "Enter price" : null,
-                    onSaved: (v) => _price = double.parse(v!),
+                    onSaved: (v) => _price = double.tryParse(v!) ?? 0,
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
@@ -213,7 +232,9 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                               child: Text(cat, style: GoogleFonts.comfortaa(color: Colors.black87)),
                             ))
                         .toList(),
-                    onChanged: (val) => setState(() => _category = val),
+                    onChanged: (val) => setState(() {
+                      if (val != null) _category = val;
+                    }),
                     validator: (v) => v == null ? "Select category" : null,
                   ),
                   const SizedBox(height: 20),
@@ -223,7 +244,14 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                         _imageUrl != null
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
-                                child: Image.network(_imageUrl!, height: 150),
+                                child: kIsWeb
+                                    ? Image.network(
+                                        _imageUrl!,
+                                        height: 150,
+                                        errorBuilder: (c, e, s) =>
+                                            Image.network("https://via.placeholder.com/150", height: 150),
+                                      )
+                                    : Image.network(_imageUrl!, height: 150),
                               )
                             : const Icon(Icons.image, color: Colors.black54, size: 100),
                         const SizedBox(height: 10),
